@@ -1,11 +1,12 @@
-const API_URL = 'https://aigrade-hook.vercel.app/api/submit';
-
-async function sendForm(data){
-  // τώρα μπορούμε άνετα να στείλουμε με JSON κανονικά
-  const r = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type':'application/json' },
-    body: JSON.stringify(data)
-  });
-  return r.ok;
+{
+  "name": "aigrade-hook",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo skip build"
+  },
+  "dependencies": {
+    "resend": "^3.3.0"
+  }
 }
