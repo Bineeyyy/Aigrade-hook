@@ -1,0 +1,24 @@
+export default async function handler(req, res) {
+  // --- CORS ---
+  const allowed = (process.env.ALLOWED_ORIGIN || '')
+    .split(',').map(s => s.trim()).filter(Boolean);
+  const origin = req.headers.origin || '';
+  if (allowed.includes(origin)) res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Vary', 'Origin');
+  res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') return res.status(204).end();  // preflight ok
+
+  if (!allowed.includes(origin)) return res.status(401).json({ error: 'bad origin' });
+  if (req.method !== 'POST')     return res.status(405).json({ error: 'method not allowed' });
+
+  // --- Read JSON body ---
+  let data = {};
+  try { data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body; }
+  catch { return res.status(400).json({ error: 'bad json' }); }
+
+  // TODO: εδώ βάζεις ό,τι θες (π.χ. αποστολή email, OpenAI, αποθήκευση)
+  // Για αρχή απλά επιβεβαιώνουμε:
+  return res.status(200).json({ ok: true, received: data });
+}
